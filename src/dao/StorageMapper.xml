@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.StorageMapper">
+    <insert id="addStorage" parameterType="Storage">
+		INSERT INTO erp_db.storage
+	(warehouseNo,
+	commodityName,
+	supplier,
+	specifications,
+	specificationUnit,
+	number,
+	unit,
+	price,
+	storagDate,
+	remarks
+	)
+	VALUES
+	(#{warehouseNo},
+	#{commodityName},
+	#{supplier},
+	#{specifications},
+	#{specificationUnit},
+	#{number},
+	#{unit},
+	#{price},
+	#{storagDate},
+	#{remarks}
+	);
+</insert>
+
+	<select id="getStorage" resultType="Storage" parameterType="Pager">
+		SELECT 	warehouseNo,
+	commodityName,
+	supplier,
+	specifications,
+	specificationUnit,
+	number,
+	unit,
+	price,
+	storagDate,
+	remarks
+
+	FROM
+	erp_db.storage
+		<if test="id!=null and id!=''">
+			where warehouseNo=#{id}
+		</if>
+	ORDER BY warehouseNo desc
+
+	LIMIT #{firstData}, #{pageSize};
+</select>
+
+	<select id="getStorageCount" resultType="int">
+		select count(1) from storage
+	</select>
+
+
+	<select id="getLastCode" resultType="String">
+		SELECT warehouseNo
+		FROM STORAGE
+		ORDER BY warehouseNo DESC  LIMIT 0,1
+	</select>
+	<!--验证是否存在商品名称-->
+
+	<select id="isExistCommodityName" parameterType="String" resultType="int">
+		select count(1) from storage where commodityName=#{name}
+	</select>
+</mapper>
